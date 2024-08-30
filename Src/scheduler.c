@@ -7,6 +7,7 @@
 #include <stdint.h>
 
 #include "scheduler.h"
+#include "stm32f407xx.h"
 
 static uint32_t pspRegValOfTasks[TASKS_NUM] = {TASK_1_STACK_START, TASK_2_STACK_START, TASK_3_STACK_START};
 
@@ -89,11 +90,23 @@ void initTasksStack()
 
 void chooseNextTask(void)
 {
-	currentTaskNum++;
-	currentTaskNum %= TASKS_NUM;
+	if (BIT_READ(EXTI->PR, 7) == 1)
+	{
+		GPIO_IRQHandling(GPIO_PIN_NUM_7);
+		currentTaskNum=0;
+	}
+	else if (BIT_READ(EXTI->PR, GPIO_PIN_NUM_8) == 1)
+	{
+		GPIO_IRQHandling(GPIO_PIN_NUM_8);
+		currentTaskNum=1;
+	}
+	else if (BIT_READ(EXTI->PR, GPIO_PIN_NUM_9) == 1) {
+		GPIO_IRQHandling(GPIO_PIN_NUM_9);
+		currentTaskNum=2;
+	}
 }
 
-__attribute__((naked)) void EXTI1_IRQHandler(void)
+__attribute__((naked)) void EXTI9_5_IRQHandler(void)
 {
 	//part of the "state of the task" is already stored on the task stack, but R4-R11 not
 	__asm volatile("MRS R0, PSP");
