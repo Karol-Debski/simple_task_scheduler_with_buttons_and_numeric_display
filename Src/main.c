@@ -17,13 +17,53 @@
  */
 
 #include <stdint.h>
+#include <stdio.h>
+#include <string.h>
 
-#if !defined(__SOFT_FP__) && defined(__ARM_FP)
-  #warning "FPU is not initialized, but the project is compiling for an FPU. Please initialize the FPU before use."
-#endif
+#include "scheduler.h"
+
+
 
 int main(void)
 {
+	initSchedulerStack(SHEDULER_STACK_START);
+
+	addTaskHandlers();
+
+	initTasksStack();
+
+	//initGpio
+
+	//main function and ISR use MSP as stack pointer, lets switch to PSP
+	switchSPtoPSP();
+
+	task1Handler();
+
     /* Loop forever */
 	for(;;);
+}
+
+
+void task1Handler(void)
+{
+	while(1)
+	{
+
+	}
+}
+
+void task2Handler(void)
+{
+	while(1)
+	{
+
+	}
+}
+
+void task3Handler(void)
+{
+	while(1)
+	{
+
+	}
 }
