@@ -51,7 +51,6 @@ __attribute__((naked)) void switchSPtoPSP(void)
 __attribute__((naked)) void initSchedulerStack(uint32_t addressOfStackStart)
 {
 	//argument of function is stored in R0
-	//__asm volatile("MSR MSP, R0");
 	__asm volatile("MSR MSP,%0": :  "r" (addressOfStackStart)  :   );
 	//return to previous function, copy LR register to PC register
 	__asm volatile("BX LR");

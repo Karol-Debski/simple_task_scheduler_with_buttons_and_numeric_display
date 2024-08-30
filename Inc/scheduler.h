@@ -5,6 +5,10 @@
  *      Author: karol
  */
 
+#ifndef INC_SCHEDULER_H_
+#define INC_SCHEDULER_H_
+
+
 #define TASKS_NUM 3
 
 #define SIZE_TASK_STACK          1024U
@@ -43,3 +47,5 @@ typedef void (*taskPointer)(void);
 extern void task1Handler(void);
 extern void task2Handler(void);
 extern void task3Handler(void);
+
+#endif /* INC_SCHEDULER_H_ */
