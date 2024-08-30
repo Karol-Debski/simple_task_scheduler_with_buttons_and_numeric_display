@@ -22,6 +22,7 @@
 
 #include "stm32f407xx.h"
 #include "scheduler.h"
+#include "buttons.h"
 
 
 
@@ -30,6 +31,8 @@ int main(void)
 	initSchedulerStack(SHEDULER_STACK_START);
 
 	addTaskHandlers();
+
+	initButtons();
 
 	initTasksStack();
 
@@ -45,10 +48,12 @@ int main(void)
 }
 
 
+
 void task1Handler(void)
 {
 	while(1)
 	{
+
 
 	}
 }
@@ -58,6 +63,7 @@ void task2Handler(void)
 	while(1)
 	{
 
+
 	}
 }
 
@@ -65,6 +71,7 @@ void task3Handler(void)
 {
 	while(1)
 	{
+
 
 	}
 }
