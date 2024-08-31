@@ -1,5 +1,6 @@
 # simple_task_scheduler_with_buttons_and_numeric_display
-![Opis obrazka](https://drive.google.com/uc?export=view&id=1iwxvQ9v73rsx-lVRNobERjt-OMenSCMp)
+<img src="https://drive.google.com/uc?export=view&id=1iwxvQ9v73rsx-lVRNobERjt-OMenSCMp" alt="Przykładowy obrazek" width="300" style="transform: rotate(90deg);"/>
+
 
 Projekt implementacji schedulera bazującego na rejestrze MSP (Main Stack Pointer) i PSP (Process Stack Pointer) z mechanizmem zapamiętywania kontekstu tasków.
 
