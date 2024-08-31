@@ -16,6 +16,7 @@
  ******************************************************************************
  */
 
+#include <seven_segment_display.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
@@ -26,6 +27,7 @@
 
 
 
+
 int main(void)
 {
 	initSchedulerStack(SHEDULER_STACK_START);
@@ -33,6 +35,7 @@ int main(void)
 	addTaskHandlers();
 
 	initButtons();
+	initDisplay();
 
 	initTasksStack();
 
@@ -53,8 +56,15 @@ void task1Handler(void)
 {
 	while(1)
 	{
+		for(int i = 0; i<50000;i++)
+		{
+			setDigitOnDisplay(1);
+		}
 
-
+		for(int i = 0; i<50000;i++)
+		{
+			setDigitOnDisplay(9);
+		}
 	}
 }
 
@@ -62,8 +72,15 @@ void task2Handler(void)
 {
 	while(1)
 	{
+		for(int i = 0; i<50000;i++)
+		{
+			setDigitOnDisplay(2);
+		}
 
-
+		for(int i = 0; i<50000;i++)
+		{
+			setDigitOnDisplay(8);
+		}
 	}
 }
 
@@ -71,7 +88,14 @@ void task3Handler(void)
 {
 	while(1)
 	{
+		for(int i = 0; i<50000;i++)
+		{
+			setDigitOnDisplay(3);
+		}
 
-
+		for(int i = 0; i<50000;i++)
+		{
+			setDigitOnDisplay(7);
+		}
 	}
 }
