@@ -14,4 +14,6 @@ void initDisplay();
 
 void setDigitOnDisplay(uint8_t digit);
 
+uint8_t getCurrentDigitOnDisplay();
+
 #endif /* SEVEN_SEGMENT_DISPLAY_H_ */
