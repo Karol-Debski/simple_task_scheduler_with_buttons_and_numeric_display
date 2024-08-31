@@ -25,46 +25,37 @@
 #include "scheduler.h"
 #include "buttons.h"
 
-
+void delay(uint32_t count);
 
 
 int main(void)
 {
 	initSchedulerStack(SHEDULER_STACK_START);
 
-	addTaskHandlers();
+	initTasks();
 
 	initButtons();
+
 	initDisplay();
-
-	initTasksStack();
-
-	//initGpio
 
 	//main function and ISR use MSP as stack pointer, lets switch to PSP
 	switchSPtoPSP();
 
 	task1Handler();
 
-    /* Loop forever */
+    /* main should not reach this point  */
 	for(;;);
 }
-
 
 
 void task1Handler(void)
 {
 	while(1)
 	{
-		for(int i = 0; i<50000;i++)
-		{
-			setDigitOnDisplay(1);
-		}
-
-		for(int i = 0; i<50000;i++)
-		{
-			setDigitOnDisplay(9);
-		}
+		setDigitOnDisplay(1);
+		delay(DELAY_COUNT_1S);
+		setDigitOnDisplay(9);
+		delay(DELAY_COUNT_1S);
 	}
 }
 
@@ -72,15 +63,10 @@ void task2Handler(void)
 {
 	while(1)
 	{
-		for(int i = 0; i<50000;i++)
-		{
-			setDigitOnDisplay(2);
-		}
-
-		for(int i = 0; i<50000;i++)
-		{
-			setDigitOnDisplay(8);
-		}
+		setDigitOnDisplay(2);
+		delay(DELAY_COUNT_1S);
+		setDigitOnDisplay(8);
+		delay(DELAY_COUNT_1S);
 	}
 }
 
@@ -88,14 +74,14 @@ void task3Handler(void)
 {
 	while(1)
 	{
-		for(int i = 0; i<50000;i++)
-		{
-			setDigitOnDisplay(3);
-		}
-
-		for(int i = 0; i<50000;i++)
-		{
-			setDigitOnDisplay(7);
-		}
+		setDigitOnDisplay(3);
+		delay(DELAY_COUNT_1S);
+		setDigitOnDisplay(7);
+		delay(DELAY_COUNT_1S);
 	}
+}
+
+void delay(uint32_t count)
+{
+  for(uint32_t i = 0 ; i < count ; i++);
 }

@@ -362,6 +362,9 @@ typedef struct
 #define SET 	ENABLE
 #define RESET 	DISABLE
 
+#define DELAY_COUNT_1MS 		 1250U
+#define DELAY_COUNT_1S  		(1000U * DELAY_COUNT_1MS)
+
 
 #define BIT_MASK(bitNum)								((1U) << (bitNum))
 #define BIT_CLEAR(reg, bitNum)							((reg) & ~BIT_MASK(bitNum))

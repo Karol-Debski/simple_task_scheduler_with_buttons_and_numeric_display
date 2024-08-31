@@ -8,7 +8,6 @@
 #ifndef INC_SCHEDULER_H_
 #define INC_SCHEDULER_H_
 
-
 #define TASKS_NUM 3
 
 #define SIZE_TASK_STACK          1024U
@@ -25,8 +24,8 @@
 
 
 #define INIT_VAL_OF_XPSR_REG 0x1000000U
-
 #define INIT_VAL_OF_LR_REG 0xFFFFFFFDU
+
 
 
 __attribute__((naked)) void initSchedulerStack(uint32_t addressOfStackStart);
@@ -35,14 +34,15 @@ __attribute__((naked)) void switchSPtoPSP(void);
 
 __attribute__((naked)) void SysTick_Handler(void);
 
+
+void initTasks();
+
 void initTasksStack(void);
 
 uint32_t getPspValue(void);
 
 void chooseNextTask(void);
 
-
-typedef void (*taskPointer)(void);
 
 extern void task1Handler(void);
 extern void task2Handler(void);

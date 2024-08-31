@@ -9,6 +9,19 @@
 #include "stm32f407xx.h"
 #include <stdint.h>
 
+
+/* Bit positions of all leds in special code, look at "digitCodes"
+ *   __0_
+ *  |	 |
+ * 5|	 |1
+ *  |__6_|
+ *  |	 |
+ * 4|	 |2
+ *  |____|
+ *     3
+ *
+ *  */
+
 static const uint8_t digitCodes[10]=
 {
 	0x7F, // 0
@@ -22,6 +35,8 @@ static const uint8_t digitCodes[10]=
 	0xFF, // 8
 	0xEF, // 9
 };
+
+static uint8_t currentDigitOnDisplay=0;
 
 void initDisplay()
 {
@@ -69,4 +84,11 @@ void setDigitOnDisplay(uint8_t digit)
 	GPIO_WriteToOutputPin(GPIOA, GPIO_PIN_NUM_4, (digitCode & (1U << 4) ) ? GPIO_HIGH : GPIO_LOW);
 	GPIO_WriteToOutputPin(GPIOA, GPIO_PIN_NUM_5, (digitCode & (1U << 5) ) ? GPIO_HIGH : GPIO_LOW);
 	GPIO_WriteToOutputPin(GPIOA, GPIO_PIN_NUM_6, (digitCode & (1U << 6) ) ? GPIO_HIGH : GPIO_LOW);
+
+	currentDigitOnDisplay=digit;
+}
+
+uint8_t getCurrentDigitOnDisplay()
+{
+	return currentDigitOnDisplay;
 }
