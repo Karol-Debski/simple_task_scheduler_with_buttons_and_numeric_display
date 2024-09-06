@@ -9,6 +9,7 @@
 #include "scheduler.h"
 #include "stm32f407xx.h"
 #include "seven_segment_display.h"
+#include "systick.h"
 
 
 static uint8_t currentTaskNum=0;
@@ -17,6 +18,7 @@ typedef struct
 {
 	uint32_t pspValue;
 	uint32_t lastDisplayDigit;
+	uint32_t lastSysTickCounterValue;
 	void (*taskPointer)(void);
 } TaskControlStruct_t;
 
@@ -103,6 +105,10 @@ void initTasks()
 	userTasks[1].taskPointer=task2Handler;
 	userTasks[2].taskPointer=task3Handler;
 
+	userTasks[0].lastSysTickCounterValue=0;
+	userTasks[1].lastSysTickCounterValue=0;
+	userTasks[2].lastSysTickCounterValue=0;
+
 
 	initTasksStack();
 }
@@ -110,6 +116,7 @@ void initTasks()
 void chooseNextTask(void)
 {
 	userTasks[currentTaskNum].lastDisplayDigit = getCurrentDigitOnDisplay();
+	userTasks[currentTaskNum].lastSysTickCounterValue = getSysTickCounterValue();
 
 	if (BIT_READ(EXTI->PR, 7) == 1)
 	{
@@ -117,6 +124,7 @@ void chooseNextTask(void)
 		currentTaskNum=0;
 		//restore hardware setup
 		setDigitOnDisplay((uint8_t)userTasks[currentTaskNum].lastDisplayDigit);
+		reasumeSysTick(userTasks[currentTaskNum].lastSysTickCounterValue);
 	}
 	else if (BIT_READ(EXTI->PR, GPIO_PIN_NUM_8) == 1)
 	{
@@ -124,31 +132,39 @@ void chooseNextTask(void)
 		currentTaskNum=1;
 		//restore hardware setup
 		setDigitOnDisplay((uint8_t)userTasks[currentTaskNum].lastDisplayDigit);
+		reasumeSysTick(userTasks[currentTaskNum].lastSysTickCounterValue);
 	}
 	else if (BIT_READ(EXTI->PR, GPIO_PIN_NUM_9) == 1) {
 		GPIO_IRQHandling(GPIO_PIN_NUM_9);
 		currentTaskNum=2;
 		//restore hardware setup
 		setDigitOnDisplay((uint8_t)userTasks[currentTaskNum].lastDisplayDigit);
+		reasumeSysTick(userTasks[currentTaskNum].lastSysTickCounterValue);
 	}
 }
+
+
 
 //no prologue and epilogue of function
 __attribute__((naked)) void EXTI9_5_IRQHandler(void)
 {
+	//processor use MSP as stack pointer until that ISR ends
+
 	//part of the "state of the task" is already stored on the task stack, but R4-R11 not
 	__asm volatile("MRS R0, PSP");
-	//decrement address on the R0 and store registers on the task stack
+	//decrement address on the R0, store register on the stack of task running before ISR and repeat
 	__asm volatile("STMDB R0!,{R4-R11}");
-	//save the LR register to avoid corrupting
+	//save the LR register on scheduler stack to avoid corrupting by BL instructions
 	__asm volatile("PUSH {LR}");
+
+	__asm volatile("BL stopCounterSysTick");
 
 	__asm volatile("BL setPspValue");
 
 	__asm volatile("BL chooseNextTask");
 
 	__asm volatile("BL getPspValue");
-	//retrieve R4-R11
+	//retrieve R4-R11 from next task
 	__asm volatile("LDMIA R0!, {R4-R11}");
 
 	__asm volatile("MSR PSP, R0");

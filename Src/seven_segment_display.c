@@ -47,6 +47,7 @@ void initDisplay()
 				.GPIO_PinNumber=GPIO_PIN_NUM_0,
 				.GPIO_PinMode=GPIO_MODE_OUTPUT,
 				.GPIO_PinOutputType=GPIO_OUTPUT_TYPE_PP,
+				.GPIO_PinOutputSpeed = GPIO_OUTPUT_SPEED_VERY_HIGH,
 			}
 	};
 
@@ -70,7 +71,6 @@ void initDisplay()
 	gpioLEDDHandler.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NUM_6;
 	GPIO_Init(&gpioLEDDHandler);
 }
-
 
 
 void setDigitOnDisplay(uint8_t digit)

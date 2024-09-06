@@ -24,8 +24,7 @@
 #include "stm32f407xx.h"
 #include "scheduler.h"
 #include "buttons.h"
-
-void delay(uint32_t count);
+#include "systick.h"
 
 
 int main(void)
@@ -38,8 +37,12 @@ int main(void)
 
 	initDisplay();
 
+	initSysTick(1);
+
 	//main function and ISR use MSP as stack pointer, lets switch to PSP
 	switchSPtoPSP();
+
+	startCounterSysTick();
 
 	task1Handler();
 
@@ -53,9 +56,9 @@ void task1Handler(void)
 	while(1)
 	{
 		setDigitOnDisplay(1);
-		delay(DELAY_COUNT_1S);
+		while(isSysTickFinishedCounting() == 0);
 		setDigitOnDisplay(9);
-		delay(DELAY_COUNT_1S);
+		while(isSysTickFinishedCounting() == 0);
 	}
 }
 
@@ -64,9 +67,9 @@ void task2Handler(void)
 	while(1)
 	{
 		setDigitOnDisplay(2);
-		delay(DELAY_COUNT_1S);
+		while(isSysTickFinishedCounting() == 0);
 		setDigitOnDisplay(8);
-		delay(DELAY_COUNT_1S);
+		while(isSysTickFinishedCounting() == 0);
 	}
 }
 
@@ -75,13 +78,8 @@ void task3Handler(void)
 	while(1)
 	{
 		setDigitOnDisplay(3);
-		delay(DELAY_COUNT_1S);
+		while(isSysTickFinishedCounting() == 0);
 		setDigitOnDisplay(7);
-		delay(DELAY_COUNT_1S);
+		while(isSysTickFinishedCounting() == 0);
 	}
-}
-
-void delay(uint32_t count)
-{
-  for(uint32_t i = 0 ; i < count ; i++);
 }
